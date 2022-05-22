@@ -51,6 +51,8 @@
             this.lbItems.Name = "lbItems";
             this.lbItems.Size = new System.Drawing.Size(173, 399);
             this.lbItems.TabIndex = 0;
+            this.lbItems.SelectedIndexChanged += new System.EventHandler(this.lbItems_SelectedIndexChanged);
+            this.lbItems.DoubleClick += new System.EventHandler(this.lbItems_DoubleClick);
             // 
             // pToolbar
             // 
