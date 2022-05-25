@@ -11,8 +11,8 @@ namespace EzDosBox
     {
         #region Management
         private const string FILENAME = "EzDosBox.conf";
-        private static string basePath;
-        private static string confPath;
+        private static readonly string basePath;
+        private static readonly string confPath;
 
         static Settings()
         {
@@ -56,8 +56,7 @@ namespace EzDosBox
                     continue;
                 string param = l.Substring(0, dp).Trim();
                 string value = l.Substring(dp + 1).Trim();
-                FieldInfo fi;
-                if (configurable.TryGetValue(param, out fi))
+                if (configurable.TryGetValue(param, out FieldInfo? fi) && fi!=null)
                     fi.SetValue(null, value);
             }
 
@@ -109,10 +108,10 @@ namespace EzDosBox
 
         // Settings
         [Conf("RootFolder", Info = "Base path for DOS applications")]
-        public static string RootFolder;
+        public static string RootFolder = "";
 
         [Conf("DosBoxPath", Info = "DosBox.exe path")]
-        public static string DosBoxPath;
+        public static string DosBoxPath = "";
     }
 
     [AttributeUsage(AttributeTargets.Field)]
