@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using XWolf;
 
 namespace EzDosBox
 {
@@ -59,7 +60,7 @@ namespace EzDosBox
         private string? iconFile;
         private string? imageFile;
         private string? infoFile;
-        private string? info;
+        private DownDocument? info;
         private Image? icon;
         private Image? image;
         private bool imageLoaded = false;
@@ -116,7 +117,7 @@ namespace EzDosBox
                                 infoFile = value;
                                 break;
                             case "info":
-                                info = value;
+                                info = new DownDocument(value);
                                 break;
                         }
                     }
@@ -126,10 +127,12 @@ namespace EzDosBox
 
         public void Run()
         {
-            ProcessStartInfo psi = new ProcessStartInfo();
-            psi.FileName = DosBoxPath;
-            psi.Arguments = "-conf " + configurationFile;
-            psi.WorkingDirectory = folder;
+            ProcessStartInfo psi = new()
+            {
+                FileName = DosBoxPath,
+                Arguments = "-conf " + configurationFile,
+                WorkingDirectory = folder
+            };
             Process p = new()
             {
                 StartInfo = psi
@@ -137,7 +140,7 @@ namespace EzDosBox
             p.Start();
         }
 
-        private string GetInfo()
+        private DownDocument GetInfo()
         {
             if (info == null)
             {
@@ -150,9 +153,9 @@ namespace EzDosBox
                         infoFile = null;
                 }
                 if (infoFile == null)
-                    info = "";
+                    info = new DownDocument();
                 else
-                    info = File.ReadAllText(infoFile);
+                    info = new DownDocument(File.ReadAllLines(infoFile));
             }
             return info;
         }
@@ -227,7 +230,7 @@ namespace EzDosBox
         public string Name => name;
         public string DosBoxPath => dosBoxPath ?? Settings.DosBoxPath;
         public string Category => category;
-        public string Info => GetInfo();
+        public DownDocument Info => GetInfo();
         public Image Icon => GetIcon();
         public Image? Image => GetImage();
 
